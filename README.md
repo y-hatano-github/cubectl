@@ -1,4 +1,4 @@
-![cubectrl](cubectrl.png)
+![cubectrl](screenshot.gif)
 # 🧊 cubectrl
 Don't mistype `kubectrl` as `cubectrl`...  
 `cubectrl` renders a 3D cube in your terminal instead of controlling Kubernetes.
