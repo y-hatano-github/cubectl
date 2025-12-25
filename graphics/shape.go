@@ -1,26 +1,26 @@
 package graphics
 
-// 座標
+// Coordinate
 type Point struct {
 	X int
 	Y int
 }
 
-// 面を構成する頂点列から線分群に変換
+// Convert a list of vertices of a face into a set of line segments
 func polygon(x, y []int) []Point {
 	ps := []Point{}
 
-	// 各頂点を結ぶ
+	// Connect each vertex to the next
 	for i := 0; i < len(x)-1; i++ {
 		ps = append(ps, line(x[i], y[i], x[i+1], y[i+1])...)
 	}
-	// 最後と最初を結ぶ
+	// Connect the last vertex to the first
 	ps = append(ps, line(x[len(x)-1], y[len(y)-1], x[0], y[0])...)
 
 	return ps
 }
 
-// Bresenham の直線アルゴリズム
+// Bresenham's line algorithm
 func line(x1, y1, x2, y2 int) []Point {
 	var dx, dy, sx, sy int
 
@@ -44,7 +44,6 @@ func line(x1, y1, x2, y2 int) []Point {
 	x := x1
 	y := y1
 
-	// 最初の点はループ内で追加する
 	if dx >= dy {
 		e := dx / 2
 		for i := 0; i <= dx; i++ {

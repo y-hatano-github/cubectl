@@ -58,7 +58,7 @@ func main() {
 	cubeLog("    kubectl\n\n", 1000)
 	cubeLog("Initializing cube rendering engine...\n", 2500)
 
-	// 立方体の頂点
+	// Cube vertices
 	v := g.VertexData{
 		[3]int{-2, -2, -2},
 		[3]int{2, -2, -2},
@@ -70,7 +70,7 @@ func main() {
 		[3]int{2, 2, 2},
 	}
 
-	// 面（頂点インデックス）
+	// Faces (vertex indices)
 	f := g.FaceData{
 		[]int{0, 1, 3, 2},
 		[]int{5, 4, 6, 7},
@@ -80,8 +80,8 @@ func main() {
 		[]int{3, 1, 5, 7},
 	}
 
-	// モデル生成（画面上の論理サイズ）
-	m := g.NewModel(40, 20) // 横幅は少し大きめに
+	// Create model (logical screen size)
+	m := g.NewModel(40, 20) // Slightly wider for better aspect ratio
 	m.Set(v, f)
 
 	err := termbox.Init()
@@ -96,10 +96,10 @@ func main() {
 	ch := make(chan termbox.Event)
 	go keyEvent(ch)
 
-	// 回転角
-	yaw := 0.0   // 左右（Y軸）
-	pitch := 0.0 // 上下（X軸）
-	scale := 0.8 // 拡大率
+	// Rotation angles
+	yaw := 0.0   // Left-right (Y-axis)
+	pitch := 0.0 // Up-down (X-axis)
+	scale := 0.8 // Zoom factor
 
 	drawString := func(x, y int, str string) {
 		runes := []rune(str)
@@ -155,12 +155,12 @@ loop:
 			termbox.Clear(termbox.ColorDefault, termbox.ColorBlack)
 			drawString(0, 0, fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", ts, pid))
 
-			// 立方体の形状（線分群）を取得
+			// Get cube shape (list of line segments)
 			s := m.GetShape(yaw, pitch, scale, 20, 10)
 
 			for _, ps := range s {
 				for _, p := range ps {
-					// モデル側でX方向の2倍補正済みなので、そのまま描画
+					// X-direction scaling is already applied in the model, so draw as-is
 					termbox.SetCell(p.X, p.Y, ' ', termbox.ColorDefault, termbox.ColorGreen)
 				}
 			}

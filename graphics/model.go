@@ -5,7 +5,7 @@ import (
 	"sort"
 )
 
-// 画面サイズやモデル情報
+// Screen size and model information
 type Model struct {
 	Width  int
 	Height int
@@ -17,26 +17,26 @@ type Model struct {
 	scale  float64
 }
 
-// 頂点
+// Vertex
 type Vertex struct {
 	X int
 	Y int
 	Z int
 
-	// 回転後の座標
+	// Coordinates after rotation
 	RX int
 	RY int
 	RZ int
 
-	// スクリーン上の座標
+	// Coordinates on the screen
 	SX int
 	SY int
 }
 
-// 面
+// Face
 type Face struct {
 	V []*Vertex
-	// 奥行き（面の平均Z）
+	// Depth (average Z of the face)
 	Z float64
 }
 
@@ -50,7 +50,7 @@ func NewModel(width, height int) Model {
 type VertexData [][3]int
 type FaceData [][]int
 
-// モデル設定
+// Set model data
 func (m *Model) Set(vd VertexData, fd FaceData) {
 	for _, v := range vd {
 		m.Vertices = append(m.Vertices, &Vertex{
@@ -72,11 +72,11 @@ func (m *Model) Set(vd VertexData, fd FaceData) {
 	m.center = Point{m.Width / 2, m.Height / 2}
 }
 
-// 描画用の座標列を取得
-// t: Y軸回転（ヨー）
-// p: X軸回転（ピッチ）
-// z: 拡大率
-// left, top: 描画オフセット
+// Get polygon coordinates for drawing
+// t: rotation around Y-axis (yaw)
+// p: rotation around X-axis (pitch)
+// z: scale factor
+// left, top: drawing offset
 func (m *Model) GetShape(t, p, z float64, left, top int) [][]Point {
 	m.update(t, p, z)
 
@@ -93,22 +93,22 @@ func (m *Model) GetShape(t, p, z float64, left, top int) [][]Point {
 	return ps
 }
 
-// 頂点のスクリーン座標・面の奥行きを更新
+// Update screen coordinates of vertices and depth of faces
 func (m *Model) update(t, p, z float64) {
-	ct := math.Cos(t) // yaw (Y軸)
+	ct := math.Cos(t) // yaw (Y-axis)
 	st := math.Sin(t)
-	cp := math.Cos(p) // pitch (X軸)
+	cp := math.Cos(p) // pitch (X-axis)
 	sp := math.Sin(p)
 
 	s := m.scale * z
 
-	// 頂点の回転＆投影
+	// Rotate and project vertices
 	for _, v := range m.Vertices {
 		x := float64(v.X)
 		y := float64(v.Y)
 		zv := float64(v.Z)
 
-		// --- Y軸回転（ヨー） ---
+		// --- Rotation around Y-axis (yaw) ---
 		// x' = x*cosT + z*sinT
 		// y' = y
 		// z' = -x*sinT + z*cosT
@@ -116,7 +116,7 @@ func (m *Model) update(t, p, z float64) {
 		y1 := y
 		z1 := -x*st + zv*ct
 
-		// --- X軸回転（ピッチ） ---
+		// --- Rotation around X-axis (pitch) ---
 		// x'' = x'
 		// y'' = y'*cosP - z'*sinP
 		// z'' = y'*sinP + z'*cosP
@@ -128,13 +128,13 @@ func (m *Model) update(t, p, z float64) {
 		v.RY = int(y2)
 		v.RZ = int(z2)
 
-		// スクリーン座標（平行投影）
-		// 文字の横長補正をここで行う（x方向だけ2倍）
+		// Screen coordinates (orthographic projection)
+		// Apply horizontal stretch correction for text rendering (double X scale)
 		v.SX = m.center.X + int(s*x2*2.0)
 		v.SY = m.center.Y - int(s*y2)
 	}
 
-	// 面の奥行き更新（平均Z）
+	// Update face depth (average Z)
 	for i := range m.Faces {
 		f := &m.Faces[i]
 		sumZ := 0.0
@@ -144,8 +144,8 @@ func (m *Model) update(t, p, z float64) {
 		f.Z = sumZ / float64(len(f.V))
 	}
 
-	// 奥行きでソート：奥（Z小）→手前（Z大）に描画したいので
-	// 「手前が後から描画される」ように昇順ではなく降順にする
+	// Sort faces by depth: far (small Z) → near (large Z)
+	// Draw near faces later, so sort in descending order
 	sort.SliceStable(m.Faces, func(i, j int) bool {
 		return m.Faces[i].Z < m.Faces[j].Z
 	})
