@@ -1,7 +1,7 @@
 package main
 
 import (
-	g "cubectrl/graphics"
+	g "cubectl/graphics"
 	"fmt"
 	"math"
 	"os"
@@ -25,7 +25,7 @@ func cubeTimestamp() string {
 }
 
 func printHelp() {
-	fmt.Println(`Usage: cubectrl [Flags]
+	fmt.Println(`Usage: cubectl [Flags]
 
 Control cube in your terminal instead of controlling Kubernetes.
 
@@ -36,7 +36,7 @@ Controls:
   Ctrl+C or Esc: Exit
 
 Flags:
-  -h, --help    help for cubectrl`)
+  -h, --help    help for cubectl`)
 }
 
 func main() {
@@ -53,7 +53,7 @@ func main() {
 	cubeLog(fmt.Sprintf("unable to read config file %q: no such file or directory\n", "/home/user/.kube/config"), 1000)
 	cubeLog(fmt.Sprintf("%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", cubeTimestamp(), pid), 200)
 	cubeLog("no configuration has been provided\n", 800)
-	cubeLog(fmt.Sprintf("%s %5d command.go:112] unknown command %q\n\n", cubeTimestamp(), pid, "kubectrl"), 1000)
+	cubeLog(fmt.Sprintf("%s %5d command.go:112] unknown command %q\n\n", cubeTimestamp(), pid, "kubectl"), 1000)
 	cubeLog("Hint: Did you mean \"kubectl\"?\n\n", 1000)
 	cubeLog("Initializing cube rendering engine...\n", 2500)
 
@@ -152,7 +152,7 @@ loop:
 			}
 		default:
 			termbox.Clear(termbox.ColorDefault, termbox.ColorBlack)
-			drawString(0, 0, fmt.Sprintf("%s %5d This is not \"kubectrl\" but \"cubectrl\"", ts, pid))
+			drawString(0, 0, fmt.Sprintf("%s %5d This is not \"kubectl\" but \"cubectl\"", ts, pid))
 
 			// 立方体の形状（線分群）を取得
 			s := m.GetShape(yaw, pitch, scale, 20, 10)

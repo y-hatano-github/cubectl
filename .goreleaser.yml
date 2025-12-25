@@ -1,6 +1,6 @@
 version: 2
 
-project_name: cubectrl
+project_name: cubectl
 env:
   - GO111MODULE=on
 before:
@@ -8,7 +8,7 @@ before:
     - go mod tidy
 builds:
   - main: main.go
-    binary: cubectrl
+    binary: cubectl
     ldflags:
       - -s -w
       - -X main.Version={{.Version}}

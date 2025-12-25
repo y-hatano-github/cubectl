@@ -1,4 +1,4 @@
-module cubectrl
+module cubectl
 
 go 1.22.2
 
