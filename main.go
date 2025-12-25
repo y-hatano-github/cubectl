@@ -90,7 +90,7 @@ func main() {
 	defer termbox.Close()
 
 	termbox.SetOutputMode(termbox.Output256)
-	termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+	termbox.Clear(termbox.ColorDefault, termbox.ColorBlack)
 
 	ch := make(chan termbox.Event)
 	go keyEvent(ch)
@@ -103,7 +103,7 @@ func main() {
 	drawString := func(x, y int, str string) {
 		runes := []rune(str)
 		for i, v := range runes {
-			termbox.SetCell(x+i, y, v, termbox.ColorDefault, termbox.ColorDefault)
+			termbox.SetCell(x+i, y, v, termbox.ColorDefault, termbox.ColorBlack)
 		}
 	}
 
@@ -151,7 +151,7 @@ loop:
 				}
 			}
 		default:
-			termbox.Clear(termbox.ColorDefault, termbox.ColorDefault)
+			termbox.Clear(termbox.ColorDefault, termbox.ColorBlack)
 			drawString(0, 0, fmt.Sprintf("%s %5d This is not \"kubectrl\" but \"cubectrl\"", ts, pid))
 
 			// 立方体の形状（線分群）を取得
