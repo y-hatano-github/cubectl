@@ -40,6 +40,12 @@ type Face struct {
 	Z float64
 }
 
+type FaceDrawData struct {
+	Outline []Point
+	Fill    []Point
+	Z       float64
+}
+
 func NewModel(width, height int) Model {
 	return Model{
 		Width:  width,
@@ -77,10 +83,12 @@ func (m *Model) Set(vd VertexData, fd FaceData) {
 // p: rotation around X-axis (pitch)
 // z: scale factor
 // left, top: drawing offset
-func (m *Model) GetShape(t, p, z float64, left, top int) [][]Point {
+func (m *Model) GetShape(t, p, z float64, left, top int) []FaceDrawData {
 	m.update(t, p, z)
 
-	var ps [][]Point
+	//var ps [][]Point
+	var fd []FaceDrawData
+
 	for _, f := range m.Faces {
 		var px []int
 		var py []int
@@ -88,9 +96,15 @@ func (m *Model) GetShape(t, p, z float64, left, top int) [][]Point {
 			px = append(px, v.SX+left)
 			py = append(py, v.SY+top)
 		}
-		ps = append(ps, polygon(px, py))
+		//ps = append(ps, polygon(px, py))
+		pl := polygon(px, py)
+		fd = append(fd, FaceDrawData{
+			Outline: pl.Outline,
+			Fill:    pl.Fill,
+			Z:       f.Z,
+		})
 	}
-	return ps
+	return fd
 }
 
 // Update screen coordinates of vertices and depth of faces

@@ -1,13 +1,27 @@
 package graphics
 
+import "sort"
+
 // Coordinate
 type Point struct {
 	X int
 	Y int
 }
 
+type PolygonData struct {
+	Outline []Point // 輪郭線
+	Fill    []Point // 塗りつぶし
+}
+
 // Convert a list of vertices of a face into a set of line segments
-func polygon(x, y []int) []Point {
+func polygon(x, y []int) PolygonData {
+	return PolygonData{
+		Outline: outline(x, y),
+		Fill:    fll(x, y),
+	}
+}
+
+func outline(x, y []int) []Point {
 	ps := []Point{}
 
 	// Connect each vertex to the next
@@ -16,6 +30,46 @@ func polygon(x, y []int) []Point {
 	}
 	// Connect the last vertex to the first
 	ps = append(ps, line(x[len(x)-1], y[len(y)-1], x[0], y[0])...)
+
+	return ps
+}
+
+func fll(x, y []int) []Point {
+	ps := []Point{}
+
+	ymin, ymax := y[0], y[0]
+	for _, v := range y {
+		if v < ymin {
+			ymin = v
+		}
+		if v > ymax {
+			ymax = v
+		}
+	}
+
+	for sy := ymin; sy <= ymax; sy++ {
+		var xs []int
+
+		for i := 0; i < len(x); i++ {
+			j := (i + 1) % len(x)
+
+			y1, y2 := y[i], y[j]
+			x1, x2 := x[i], x[j]
+
+			if (y1 <= sy && y2 > sy) || (y2 <= sy && y1 > sy) {
+				ix := x1 + (sy-y1)*(x2-x1)/(y2-y1)
+				xs = append(xs, ix)
+			}
+		}
+
+		sort.Ints(xs)
+
+		for i := 0; i+1 < len(xs); i += 2 {
+			for sx := xs[i]; sx <= xs[i+1]; sx++ {
+				ps = append(ps, Point{X: sx, Y: sy})
+			}
+		}
+	}
 
 	return ps
 }

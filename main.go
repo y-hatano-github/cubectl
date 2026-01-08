@@ -156,12 +156,15 @@ loop:
 			drawString(0, 0, fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", ts, pid))
 
 			// Get cube shape (list of line segments)
-			s := m.GetShape(yaw, pitch, scale, 20, 10)
+			faceData := m.GetShape(yaw, pitch, scale, 20, 10)
 
-			for _, ps := range s {
-				for _, p := range ps {
-					// X-direction scaling is already applied in the model, so draw as-is
-					termbox.SetCell(p.X, p.Y, ' ', termbox.ColorDefault, termbox.ColorGreen)
+			for _, fd := range faceData {
+				// for _, p := range fd.Fill {
+				// 	termbox.SetCell(p.X, p.Y, ' ', termbox.ColorDefault, termbox.ColorBlack)
+
+				// }
+				for _, p := range fd.Outline {
+					termbox.SetCell(p.X, p.Y, ' ', termbox.ColorDefault, termbox.ColorWhite)
 				}
 			}
 			termbox.Flush()
