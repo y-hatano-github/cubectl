@@ -1,17 +1,25 @@
-package cmd
+package cube
 
 import (
-	g "cubectl/graphics"
+	"context"
+	g "cubectl/internal/graphics"
 	"fmt"
 	"math"
 	"os"
 	"time"
 
 	"github.com/nsf/termbox-go"
-	"github.com/spf13/cobra"
 )
 
-func RunCube(cmd *cobra.Command, args []string) error {
+type Options struct {
+	Output string
+	Watch  bool
+}
+
+func Run(ctx context.Context, opts Options) error {
+	output := opts.Output
+	w := opts.Watch
+
 	if output == "" {
 		output = "wireframe" // default
 	}
@@ -21,16 +29,15 @@ func RunCube(cmd *cobra.Command, args []string) error {
 	default:
 		return fmt.Errorf("unknown output format %q", output)
 	}
-	w, _ := cmd.Flags().GetBool("watch") // watch フラグ
 
 	pid := os.Getpid()
 	logs := []string{
-		fmt.Sprintf("%s %5d loader.go:223] Error loading kubeconfig:\n", cubeTimestamp(), pid),
+		fmt.Sprintf("%s %5d loader.go:223] Error loading kubeconfig:\n", CubeTimestamp(), pid),
 		fmt.Sprintf("unable to read config file %q: no such file or directory\n", "/home/user/.kube/config"),
-		fmt.Sprintf("%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", cubeTimestamp(), pid),
+		fmt.Sprintf("%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", CubeTimestamp(), pid),
 		"no configuration has been provided\n",
-		fmt.Sprintf("%s %5d command.go:112] error: unknown command %q\n\n", cubeTimestamp(), pid, "kubectl"),
-		fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", cubeTimestamp(), pid),
+		fmt.Sprintf("%s %5d command.go:112] error: unknown command %q\n\n", CubeTimestamp(), pid, "kubectl"),
+		fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", CubeTimestamp(), pid),
 		"Did you mean this?\n",
 		"    kubectl\n\n",
 	}
@@ -151,7 +158,7 @@ func keyEvent(ch chan termbox.Event) {
 	}
 }
 
-func cubeTimestamp() string {
+func CubeTimestamp() string {
 	now := time.Now()
 	return fmt.Sprintf(
 		"E%s %s",

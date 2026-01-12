@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+
+	cube "cubectl/internal/cube"
 )
 
 var logsCmd = &cobra.Command{
@@ -21,13 +23,13 @@ var logsCmd = &cobra.Command{
 
 		pid := os.Getpid()
 		logs := []string{
-			fmt.Sprintf("%s %5d loader.go:223] Error loading kubeconfig:\n", cubeTimestamp(), pid),
+			fmt.Sprintf("%s %5d loader.go:223] Error loading kubeconfig:\n", cube.CubeTimestamp(), pid),
 			fmt.Sprintf("unable to read config file %q: no such file or directory\n", "/home/user/.kube/config"),
-			fmt.Sprintf("%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", cubeTimestamp(), pid),
+			fmt.Sprintf("%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", cube.CubeTimestamp(), pid),
 			"no configuration has been provided\n",
-			fmt.Sprintf("%s %5d command.go:112] error: unknown command %q\n\n", cubeTimestamp(), pid, "kubectl"),
-			fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"\n", cubeTimestamp(), pid),
-			fmt.Sprintf("%s %5d cube.go:99] Initializing cube rendering engine for %q\n", cubeTimestamp(), pid, cubeName),
+			fmt.Sprintf("%s %5d command.go:112] error: unknown command %q\n\n", cube.CubeTimestamp(), pid, "kubectl"),
+			fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"\n", cube.CubeTimestamp(), pid),
+			fmt.Sprintf("%s %5d cube.go:99] Initializing cube rendering engine for %q\n", cube.CubeTimestamp(), pid, cubeName),
 		}
 
 		for _, l := range logs {
@@ -38,10 +40,11 @@ var logsCmd = &cobra.Command{
 		if follow {
 			for i := 0; i < 10; i++ {
 				time.Sleep(500 * time.Millisecond)
-				fmt.Printf("%s %5d cube.go:100] rotating cube... step %d\n", cubeTimestamp(), pid, i+1)
+				fmt.Printf("%s %5d cube.go:100] rotating cube... step %d\n", cube.CubeTimestamp(), pid, i+1)
 			}
 		}
 	},
+	GroupID: "troubleshooting",
 }
 
 func init() {

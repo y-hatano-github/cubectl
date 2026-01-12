@@ -9,6 +9,7 @@ var describeCmd = &cobra.Command{
 	Short: "Describe resources",
 	Long: `Describe resources from cubectl.
 This command mimics 'kubectl describe' but operates on cubes and other joke resources.`,
+	GroupID: "troubleshooting",
 }
 
 func init() {
