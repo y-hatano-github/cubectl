@@ -45,9 +45,9 @@ func init() {
 	getCmd.AddCommand(getCubesCmd)
 
 	getCubeCmd.Flags().StringVarP(&output, "output", "o", "wireframe", "Output format: wireframe|solid")
-	getCubeCmd.Flags().Bool("watch", false, "Auto-rotate cube")
+	getCubeCmd.Flags().BoolP("watch", "w", false, "Watch for changes to the cube (it will keep spinning)")
 
 	getCubesCmd.Flags().StringVarP(&output, "output", "o", "wireframe", "Output format: wireframe|solid")
-	getCubesCmd.Flags().Bool("watch", false, "Auto-rotate cube")
+	getCubesCmd.Flags().BoolP("watch", "w", false, "Watch for changes to the cube (it will keep spinning)")
 
 }

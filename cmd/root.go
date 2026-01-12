@@ -18,7 +18,11 @@ const cubectlHelpTemplate = `{{with or .Long .Short }}{{. | trimTrailingWhitespa
 {{- end}}
 {{- end}}
 {{end}}
-{{end}}{{if .HasAvailableLocalFlags}}Flags:
+{{end}}
+{{if .HasExample}}Examples:
+{{.Example | trimTrailingWhitespaces}}
+{{end}}
+{{if .HasAvailableLocalFlags}}Flags:
 {{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}
 
 {{end}}{{if .HasAvailableInheritedFlags}}Global Flags:

@@ -41,9 +41,9 @@ func init() {
 	getCmd.AddCommand(getPodCmd)
 
 	getPodsCmd.Flags().StringVarP(&output, "output", "o", "wireframe", "Output format: wireframe|solid")
-	getPodsCmd.Flags().Bool("watch", false, "Auto-rotate cube")
+	getPodsCmd.Flags().BoolP("watch", "w", false, "Watch for changes to the cube (it will keep spinning)")
 
 	getPodCmd.Flags().StringVarP(&output, "output", "o", "wireframe", "Output format: wireframe|solid")
-	getPodCmd.Flags().Bool("watch", false, "Auto-rotate cube")
+	getPodCmd.Flags().BoolP("watch", "w", false, "Watch for changes to the cube (it will keep spinning)")
 
 }
