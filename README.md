@@ -42,7 +42,7 @@ tar -xzvf cubectl_windows_amd64.tar.gz
 ```
 
 # 📘 Usage
-```
+```bash
 cubectl controls cube instead of Kubernetes clusters.
 
 Find more information at:
@@ -54,21 +54,23 @@ Controls:
   x: Zoom out
   Ctrl+C or Esc: Exit
 
-Usage:
-  cubectl [flags]
-  cubectl [command]
-
-Available Commands:
-  completion  Generate the autocompletion script for the specified shell
-  describe    Describe resources
+Basic Cube Commands (Beginner):
   get         Get cube
-  help        Help about any command
+
+Troubleshooting and Debugging Commands:
+  describe    Describe resources
   logs        Print the logs for a cubectl
 
 Flags:
   -h, --help   help for cubectl
 
-Use "cubectl [command] --help" for more information about a command.
+Usage:
+  cubectl [flags]
+
+Usage:
+  cubectl [command]
+
+Use "cubectl <command> --help" for more information about a command.
 ```
 
 # 📚 References
