@@ -32,12 +32,12 @@ func Run(ctx context.Context, opts Options) error {
 
 	pid := os.Getpid()
 	logs := []string{
-		fmt.Sprintf("%s %5d loader.go:223] Error loading kubeconfig:\n", CubeTimestamp(), pid),
+		fmt.Sprintf("E%s %5d loader.go:223] Error loading kubeconfig:\n", CubeTimestamp(), pid),
 		fmt.Sprintf("unable to read config file %q: no such file or directory\n", "/home/user/.kube/config"),
-		fmt.Sprintf("%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", CubeTimestamp(), pid),
+		fmt.Sprintf("E%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", CubeTimestamp(), pid),
 		"no configuration has been provided\n",
-		fmt.Sprintf("%s %5d command.go:112] error: unknown command %q\n\n", CubeTimestamp(), pid, "kubectl"),
-		fmt.Sprintf("%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", CubeTimestamp(), pid),
+		fmt.Sprintf("E%s %5d command.go:112] error: unknown command %q\n\n", CubeTimestamp(), pid, "kubectl"),
+		fmt.Sprintf("E%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", CubeTimestamp(), pid),
 		"Did you mean this?\n",
 		"    kubectl\n\n",
 	}
@@ -161,7 +161,7 @@ func keyEvent(ch chan termbox.Event) {
 func CubeTimestamp() string {
 	now := time.Now()
 	return fmt.Sprintf(
-		"E%s %s",
+		"%s %s",
 		now.Format("0102"),            // MMDD
 		now.Format("15:04:05.000000"), // HH:MM:SS.microsec
 	)
