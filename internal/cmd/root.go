@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"cubectl/cmd/describe"
-	"cubectl/cmd/get"
-	"cubectl/cmd/logs"
+	"cubectl/internal/cmd/describe"
+	"cubectl/internal/cmd/get"
+	"cubectl/internal/cmd/logs"
 	cube "cubectl/internal/cube"
 
 	"github.com/spf13/cobra"

@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/nsf/termbox-go"
+	"cubectl/internal/terminal"
 )
 
 type Options struct {
@@ -25,7 +25,7 @@ func Run(ctx context.Context, opts Options) error {
 	}
 	switch output {
 	case "wireframe", "solid":
-		// ok
+		// valid
 	default:
 		return fmt.Errorf("unknown output format %q", output)
 	}
@@ -67,16 +67,17 @@ func Run(ctx context.Context, opts Options) error {
 	m := g.NewModel(40, 20)
 	m.Set(v, f)
 
-	if err := termbox.Init(); err != nil {
+	s := terminal.New()
+	if err := s.Init(); err != nil {
 		return err
 	}
-	defer termbox.Close()
+	defer s.Close()
 
-	termbox.SetOutputMode(termbox.Output256)
-	termbox.Clear(termbox.ColorDefault, termbox.ColorBlack)
+	s.SetOutputMode()
+	s.Clear()
 
-	ch := make(chan termbox.Event)
-	go keyEvent(ch)
+	ch := make(chan terminal.Event)
+	go keyEvent(ch, s)
 
 	yaw := 0.0
 	pitch := 0.0
@@ -84,7 +85,7 @@ func Run(ctx context.Context, opts Options) error {
 
 	drawString := func(x, y int, str string) {
 		for i, r := range str {
-			termbox.SetCell(x+i, y, r, termbox.ColorDefault, termbox.ColorBlack)
+			s.SetCell(x+i, y, r, terminal.ColorDefault, terminal.ColorBlack)
 		}
 	}
 
@@ -93,32 +94,32 @@ loop:
 		select {
 		case ev := <-ch:
 			switch ev.Type {
-			case termbox.EventKey:
-				if ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyEsc {
+			case terminal.EventKey:
+				if ev.Key == terminal.KeyCtrlC || ev.Key == terminal.KeyEsc {
 					break loop
 				}
-				if ev.Key == termbox.KeyArrowLeft || string(ev.Ch) == "a" {
+				if ev.Key == terminal.KeyArrowLeft || string(ev.Rune) == "a" {
 					yaw -= 0.1
 				}
-				if ev.Key == termbox.KeyArrowRight || string(ev.Ch) == "d" {
+				if ev.Key == terminal.KeyArrowRight || string(ev.Rune) == "d" {
 					yaw += 0.1
 				}
-				if ev.Key == termbox.KeyArrowUp || string(ev.Ch) == "w" {
+				if ev.Key == terminal.KeyArrowUp || string(ev.Rune) == "w" {
 					pitch -= 0.1
 				}
-				if ev.Key == termbox.KeyArrowDown || string(ev.Ch) == "s" {
+				if ev.Key == terminal.KeyArrowDown || string(ev.Rune) == "s" {
 					pitch += 0.1
 				}
-				if string(ev.Ch) == "z" {
+				if string(ev.Rune) == "z" {
 					scale += 0.1
 				}
-				if string(ev.Ch) == "x" {
+				if string(ev.Rune) == "x" {
 					scale -= 0.1
 					scale = math.Max(0.1, scale-0.1)
 				}
 			}
 		default:
-			termbox.Clear(termbox.ColorDefault, termbox.ColorBlack)
+			s.Clear()
 
 			for l := 0; l < logIndex; l++ {
 				drawString(0, l, logs[l])
@@ -136,15 +137,15 @@ loop:
 			for _, fd := range faceData {
 				if output == "solid" {
 					for _, p := range fd.Fill {
-						termbox.SetCell(p.X, p.Y, ' ', termbox.ColorDefault, termbox.ColorBlack)
+						s.SetCell(p.X, p.Y, ' ', terminal.ColorDefault, terminal.ColorBlack)
 					}
 				}
 				for _, p := range fd.Outline {
-					termbox.SetCell(p.X, p.Y, ' ', termbox.ColorDefault, termbox.ColorWhite)
+					s.SetCell(p.X, p.Y, ' ', terminal.ColorDefault, terminal.ColorWhite)
 				}
 			}
 
-			termbox.Flush()
+			s.Flush()
 			time.Sleep(10 * time.Millisecond)
 		}
 	}
@@ -152,9 +153,9 @@ loop:
 	return nil
 }
 
-func keyEvent(ch chan termbox.Event) {
+func keyEvent(ch chan terminal.Event, s terminal.Screen) {
 	for {
-		ch <- termbox.PollEvent()
+		ch <- s.PollEvent()
 	}
 }
 

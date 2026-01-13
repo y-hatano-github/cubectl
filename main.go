@@ -1,6 +1,6 @@
 package main
 
-import "cubectl/cmd"
+import "cubectl/internal/cmd"
 
 func main() {
 	cmd.Execute()
