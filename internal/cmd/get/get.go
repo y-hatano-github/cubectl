@@ -3,7 +3,7 @@ package get
 import (
 	"github.com/spf13/cobra"
 
-	cube "cubectl/internal/cube"
+	cube "cubectl/internal/app/cube"
 )
 
 func NewGetCmd() *cobra.Command {
@@ -30,7 +30,7 @@ This command mimics 'kubectl get' but operates on cubes and other joke resources
 				Output: output,
 				Watch:  watch,
 			}
-			return cube.Run(cmd.Context(), opts)
+			return cube.Render(cmd.Context(), opts)
 		},
 		GroupID: "basic",
 	}

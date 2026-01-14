@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
+	cube "cubectl/internal/app/cube"
 	"cubectl/internal/cmd/describe"
 	"cubectl/internal/cmd/get"
 	"cubectl/internal/cmd/logs"
-	cube "cubectl/internal/cube"
 
 	"github.com/spf13/cobra"
 )
@@ -34,7 +34,7 @@ Controls:
 			Watch:  watch,
 		}
 		// default action
-		cube.Run(cmd.Context(), opts)
+		cube.Render(cmd.Context(), opts)
 	},
 	SilenceUsage: true,
 }

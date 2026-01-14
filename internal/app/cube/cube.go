@@ -5,9 +5,10 @@ import (
 	g "cubectl/internal/graphics"
 	"fmt"
 	"math"
-	"os"
+	"strings"
 	"time"
 
+	"cubectl/internal/logger"
 	"cubectl/internal/terminal"
 )
 
@@ -16,7 +17,7 @@ type Options struct {
 	Watch  bool
 }
 
-func Run(ctx context.Context, opts Options) error {
+func Render(ctx context.Context, opts Options) error {
 	output := opts.Output
 	w := opts.Watch
 
@@ -30,17 +31,14 @@ func Run(ctx context.Context, opts Options) error {
 		return fmt.Errorf("unknown output format %q", output)
 	}
 
-	pid := os.Getpid()
-	logs := []string{
-		fmt.Sprintf("E%s %5d loader.go:223] Error loading kubeconfig:\n", CubeTimestamp(), pid),
-		fmt.Sprintf("unable to read config file %q: no such file or directory\n", "/home/user/.kube/config"),
-		fmt.Sprintf("E%s %5d round_trippers.go:45] Failed to create Kubernetes client:\n", CubeTimestamp(), pid),
-		"no configuration has been provided\n",
-		fmt.Sprintf("E%s %5d command.go:112] error: unknown command %q\n\n", CubeTimestamp(), pid, "kubectl"),
-		fmt.Sprintf("E%s %5d command.go:112] This is not \"kubectl\" but \"cubectl\"", CubeTimestamp(), pid),
-		"Did you mean this?\n",
-		"    kubectl\n\n",
+	logs := []logger.LogMessage{
+		{File: "loader.go", Line: 0, Text: "Warning: This output is a joke.", Level: logger.Warn, TimeStamp: logger.Timestamp()},
+		{File: "loader.go", Line: 223, Text: "Error loading kubeconfig:\nunable to read config file \"/home/user/.kube/config\": no such file or directory", Level: logger.Error, TimeStamp: logger.Timestamp()},
+		{File: "round_trippers.go", Line: 45, Text: "Failed to create Kubernetes client:\nno configuration has been provided", Level: logger.Error, TimeStamp: logger.Timestamp()},
+		{File: "command.go", Line: 112, Text: "error: unknown command \"kubectl\"", Level: logger.Error, TimeStamp: logger.Timestamp()},
+		{File: "command.go", Line: 112, Text: "This is not \"kubectl\" but \"cubectl\"\nDid you mean this?\n    kubectl", Level: logger.Warn, TimeStamp: logger.Timestamp()},
 	}
+
 	logIndex := 0
 
 	// Cube vertices
@@ -121,8 +119,13 @@ loop:
 		default:
 			s.Clear()
 
-			for l := 0; l < logIndex; l++ {
-				drawString(0, l, logs[l])
+			r := 0
+			for l := range logIndex {
+				lines := strings.Split(logs[l].String(), "\n")
+				for _, line := range lines {
+					drawString(0, r, line)
+					r = r + 1
+				}
 			}
 			if logIndex < len(logs) {
 				logIndex++

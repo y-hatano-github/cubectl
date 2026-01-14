@@ -1,7 +1,7 @@
 package get
 
 import (
-	cube "cubectl/internal/cube"
+	cube "cubectl/internal/app/cube"
 
 	"github.com/spf13/cobra"
 )
@@ -22,7 +22,7 @@ func NewGetCubeCmd() *cobra.Command {
 				Output: output,
 				Watch:  watch,
 			}
-			return cube.Run(cmd.Context(), opts)
+			return cube.Render(cmd.Context(), opts)
 		},
 	}
 
@@ -43,7 +43,7 @@ func NewGetCubesCmd() *cobra.Command {
 				Output: output,
 				Watch:  watch,
 			}
-			return cube.Run(cmd.Context(), opts)
+			return cube.Render(cmd.Context(), opts)
 		},
 	}
 
