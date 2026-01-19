@@ -31,12 +31,14 @@ func Render(ctx context.Context, opts Options) error {
 		return fmt.Errorf("unknown output format %q", output)
 	}
 
-	logs := []logger.LogMessage{
-		{File: "loader.go", Line: 0, Text: "Warning: This output is a joke.", Level: logger.Warn, TimeStamp: logger.Timestamp()},
-		{File: "loader.go", Line: 223, Text: "Error loading kubeconfig:\nunable to read config file \"/home/user/.kube/config\": no such file or directory", Level: logger.Error, TimeStamp: logger.Timestamp()},
-		{File: "round_trippers.go", Line: 45, Text: "Failed to create Kubernetes client:\nno configuration has been provided", Level: logger.Error, TimeStamp: logger.Timestamp()},
-		{File: "command.go", Line: 112, Text: "error: unknown command \"kubectl\"", Level: logger.Error, TimeStamp: logger.Timestamp()},
-		{File: "command.go", Line: 112, Text: "This is not \"kubectl\" but \"cubectl\"\nDid you mean this?\n    kubectl", Level: logger.Warn, TimeStamp: logger.Timestamp()},
+	clog := logger.New()
+
+	logs := []string{
+		clog.Swarn(logger.Message{File: "loader.go", Line: 0, Text: "Warning: This output is a joke."}),
+		clog.Serror(logger.Message{File: "loader.go", Line: 223, Text: "Error loading kubeconfig:\nunable to read config file \"/home/user/.kube/config\": no such file or directory"}),
+		clog.Serror(logger.Message{File: "round_trippers.go", Line: 45, Text: "Failed to create Kubernetes client:\nno configuration has been provided"}),
+		clog.Serror(logger.Message{File: "command.go", Line: 112, Text: "error: unknown command \"kubectl\""}),
+		clog.Swarn(logger.Message{File: "command.go", Line: 112, Text: "This is not \"kubectl\" but \"cubectl\"\nDid you mean this?\n    kubectl"}),
 	}
 
 	logIndex := 0
@@ -121,7 +123,7 @@ loop:
 
 			r := 0
 			for l := range logIndex {
-				lines := strings.Split(logs[l].String(), "\n")
+				lines := strings.Split(logs[l], "\n")
 				for _, line := range lines {
 					drawString(0, r, line)
 					r = r + 1
