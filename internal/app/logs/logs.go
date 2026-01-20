@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	g "cubectl/internal/graphics"
 	"cubectl/internal/logger"
 )
 
@@ -37,6 +38,32 @@ func Log(ctx context.Context, ots Options) error {
 
 	lcnt := 0
 	step := 1
+
+	v := g.VertexData{
+		[3]int{-2, -2, -2},
+		[3]int{2, -2, -2},
+		[3]int{-2, 2, -2},
+		[3]int{2, 2, -2},
+		[3]int{-2, -2, 2},
+		[3]int{2, -2, 2},
+		[3]int{-2, 2, 2},
+		[3]int{2, 2, 2},
+	}
+
+	f := g.FaceData{
+		[]int{0, 1, 3, 2},
+		[]int{5, 4, 6, 7},
+		[]int{0, 1, 5, 4},
+		[]int{3, 2, 6, 7},
+		[]int{0, 2, 6, 4},
+		[]int{3, 1, 5, 7},
+	}
+
+	m := g.NewModel(v, f, 8)
+
+	yaw := 0.48
+	pitch := 0.24
+	scale := 0.4
 Loop:
 	for {
 		select {
@@ -54,16 +81,43 @@ Loop:
 					} else {
 						step++
 					}
+					yaw += 0.08
+					pitch += 0.04
+					drawCube(&m, yaw, pitch, scale)
 				} else {
+					drawCube(&m, yaw, pitch, scale)
 					break Loop
 				}
 			}
-
-			time.Sleep(200 * time.Millisecond)
+			time.Sleep(300 * time.Millisecond)
 		}
 	}
 
 	return nil
+}
+
+func drawCube(m *g.Model, yaw, pitch, scale float64) {
+	d := [40][40]int{}
+	faceData := m.GetShape(yaw, pitch, scale, 20, 10)
+	for _, fd := range faceData {
+		// for _, p := range fd.Fill {
+		// 	d[p.X][p.Y] = 0
+		// }
+		for _, p := range fd.Outline {
+			d[p.X][p.Y] = 1
+		}
+	}
+
+	for y := 0; y < 20; y++ {
+		for x := 0; x < 40; x++ {
+			if d[x][y] > 0 {
+				fmt.Print("█")
+			} else {
+				fmt.Print(" ")
+			}
+		}
+		fmt.Println()
+	}
 }
 
 func isEmpty(s *string) bool {
