@@ -7,9 +7,6 @@ import (
 
 // Screen size and model information
 type Model struct {
-	Width  int
-	Height int
-
 	Vertices []*Vertex
 	Faces    []Face
 
@@ -46,18 +43,17 @@ type FaceDrawData struct {
 	Z       float64
 }
 
-func NewModel(width, height int) Model {
-	return Model{
-		Width:  width,
-		Height: height,
-	}
+func NewModel(vd VertexData, fd FaceData, defaultScale float64) Model {
+	m := Model{}
+	m.Set(vd, fd, defaultScale)
+	return m
 }
 
 type VertexData [][3]int
 type FaceData [][]int
 
 // Set model data
-func (m *Model) Set(vd VertexData, fd FaceData) {
+func (m *Model) Set(vd VertexData, fd FaceData, defaultScale float64) {
 	for _, v := range vd {
 		m.Vertices = append(m.Vertices, &Vertex{
 			X: v[0],
@@ -74,29 +70,28 @@ func (m *Model) Set(vd VertexData, fd FaceData) {
 		m.Faces = append(m.Faces, Face{V: vs})
 	}
 
-	m.scale = float64(m.Width) * 0.4 / 2
-	m.center = Point{m.Width / 2, m.Height / 2}
+	m.scale = defaultScale
 }
 
 // Get polygon coordinates for drawing
-// t: rotation around Y-axis (yaw)
-// p: rotation around X-axis (pitch)
-// z: scale factor
-// left, top: drawing offset
-func (m *Model) GetShape(t, p, z float64, left, top int) []FaceDrawData {
-	m.update(t, p, z)
+// yaw: rotation around Y-axis
+// pitch: rotation around X-axis
+// scale: scale factor
+// x, y: center point
+func (m *Model) GetShape(yaw, pitch, scale float64, x, y int) []FaceDrawData {
+	m.center = Point{x, y}
+	m.update(yaw, pitch, scale)
 
-	//var ps [][]Point
 	var fd []FaceDrawData
 
 	for _, f := range m.Faces {
 		var px []int
 		var py []int
 		for _, v := range f.V {
-			px = append(px, v.SX+left)
-			py = append(py, v.SY+top)
+			px = append(px, v.SX)
+			py = append(py, v.SY)
 		}
-		//ps = append(ps, polygon(px, py))
+
 		pl := polygon(px, py)
 		fd = append(fd, FaceDrawData{
 			Outline: pl.Outline,
@@ -108,13 +103,13 @@ func (m *Model) GetShape(t, p, z float64, left, top int) []FaceDrawData {
 }
 
 // Update screen coordinates of vertices and depth of faces
-func (m *Model) update(t, p, z float64) {
-	ct := math.Cos(t) // yaw (Y-axis)
-	st := math.Sin(t)
-	cp := math.Cos(p) // pitch (X-axis)
-	sp := math.Sin(p)
+func (m *Model) update(yaw, pitch, scale float64) {
+	ct := math.Cos(yaw) // yaw (Y-axis)
+	st := math.Sin(yaw)
+	cp := math.Cos(pitch) // pitch (X-axis)
+	sp := math.Sin(pitch)
 
-	s := m.scale * z
+	s := m.scale * scale
 
 	// Rotate and project vertices
 	for _, v := range m.Vertices {

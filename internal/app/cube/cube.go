@@ -64,8 +64,7 @@ func Render(ctx context.Context, opts Options) error {
 		[]int{3, 1, 5, 7},
 	}
 
-	m := g.NewModel(40, 20)
-	m.Set(v, f)
+	m := g.NewModel(v, f, 8)
 
 	s := terminal.New()
 	if err := s.Init(); err != nil {
@@ -138,7 +137,7 @@ loop:
 				pitch += 0.01
 			}
 
-			faceData := m.GetShape(yaw, pitch, scale, 20, 10)
+			faceData := m.GetShape(yaw, pitch, scale, 40, 20)
 			for _, fd := range faceData {
 				if output == "solid" {
 					for _, p := range fd.Fill {
