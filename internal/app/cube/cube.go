@@ -81,6 +81,7 @@ func Render(ctx context.Context, opts Options) error {
 	yaw := 0.0
 	pitch := 0.0
 	scale := 0.6
+	twoPi := 2 * math.Pi
 
 	drawString := func(x, y int, str string) {
 		for i, r := range str {
@@ -98,23 +99,24 @@ loop:
 					break loop
 				}
 				if ev.Key == terminal.KeyArrowLeft || string(ev.Rune) == "a" {
-					yaw -= 0.1
+					yaw = math.Mod(yaw-0.1, twoPi)
 				}
 				if ev.Key == terminal.KeyArrowRight || string(ev.Rune) == "d" {
-					yaw += 0.1
+					yaw = math.Mod(yaw+0.1, twoPi)
 				}
 				if ev.Key == terminal.KeyArrowUp || string(ev.Rune) == "w" {
-					pitch -= 0.1
+					pitch = math.Mod(pitch-0.1, twoPi)
 				}
 				if ev.Key == terminal.KeyArrowDown || string(ev.Rune) == "s" {
-					pitch += 0.1
+					pitch = math.Mod(pitch+0.1, twoPi)
 				}
 				if string(ev.Rune) == "z" {
 					scale += 0.1
+					scale = math.Min(1.3, scale)
 				}
 				if string(ev.Rune) == "x" {
 					scale -= 0.1
-					scale = math.Max(0.1, scale-0.1)
+					scale = math.Max(0.1, scale)
 				}
 			}
 		default:
@@ -133,8 +135,8 @@ loop:
 			}
 
 			if w {
-				yaw += 0.02
-				pitch += 0.01
+				yaw = math.Mod(yaw+0.02, twoPi)
+				pitch = math.Mod(pitch+0.01, twoPi)
 			}
 
 			faceData := m.GetShape(yaw, pitch, scale, 40, 20)

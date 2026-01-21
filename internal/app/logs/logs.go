@@ -3,6 +3,7 @@ package logs
 import (
 	"context"
 	"fmt"
+	"math"
 	"os"
 	"os/signal"
 	"syscall"
@@ -64,6 +65,7 @@ func Log(ctx context.Context, ots Options) error {
 	yaw := 0.48
 	pitch := 0.24
 	scale := 0.4
+	twoPi := 2 * math.Pi
 Loop:
 	for {
 		select {
@@ -81,8 +83,8 @@ Loop:
 					} else {
 						step++
 					}
-					yaw += 0.08
-					pitch += 0.04
+					yaw = math.Mod(yaw+0.08, twoPi)
+					pitch = math.Mod(pitch+0.04, twoPi)
 					drawCube(&m, yaw, pitch, scale)
 				} else {
 					drawCube(&m, yaw, pitch, scale)
