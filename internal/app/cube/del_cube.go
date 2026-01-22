@@ -73,7 +73,6 @@ func RenderD(ctx context.Context, opts Options) error {
 
 	faceData := m.GetShape(yaw, pitch, scale, 40, 20)
 	iscollapse := false
-	//count := 0
 
 	dxs := make([][]float64, len(faceData))
 	dys := make([][]float64, len(faceData))
@@ -102,7 +101,7 @@ loop:
 			}
 		default:
 			s.Clear()
-			// ログ描画
+
 			r := 0
 			for l := range logIndex {
 				lines := strings.Split(logs[l], "\n")
@@ -120,16 +119,12 @@ loop:
 			}
 
 			if iscollapse {
-				//if count == 3 {
-				//	count = 0
 				for i, fd := range faceData {
 					for j := range fd.Outline {
 						dxs[i][j] = rand.Float64() - float64(1.1)*2
 						dys[i][j] = rand.Float64() - float64(1.5)
 					}
 				}
-				//}
-				//count++
 			}
 
 			allZero := true
