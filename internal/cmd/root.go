@@ -5,6 +5,7 @@ import (
 	"os"
 
 	cube "cubectl/internal/app/cube"
+	"cubectl/internal/cmd/delete"
 	"cubectl/internal/cmd/describe"
 	"cubectl/internal/cmd/get"
 	"cubectl/internal/cmd/logs"
@@ -57,6 +58,7 @@ func init() {
 	rootCmd.AddCommand(describe.NewDescribeCmd())
 	rootCmd.AddCommand(get.NewGetCmd())
 	rootCmd.AddCommand(logs.NewLogsCmd())
+	rootCmd.AddCommand(delete.NewDeleteCmd())
 }
 
 // Execute executes the root command
