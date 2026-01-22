@@ -4,6 +4,17 @@
 ![Go Version](https://img.shields.io/github/go-mod/go-version/y-hatano-github/cubectl)
 ![License](https://img.shields.io/github/license/y-hatano-github/cubectl)
 
+```bash
+   ________  ______  ____________________
+  / ____/ / / / __ )/ ____/ ____/__ __/ /
+ / /   / / / / __  / __/ / /     / / / /
+/ /___/ /_/ / /_/ / /___/ /___  / / / /___
+\____/\____/_____/_____/\____/ /_/ /_____/
+      _
+    /_/|  Concept: "Control the Cube instead of Kubernetes cluster"
+    |_|/
+```
+
 Once you mistype `kubectl` as `cubectl`, you’ll end up controlling a cube instead of Kubernetes clusters.  
 This tool makes your typos fun.  
 
@@ -55,11 +66,14 @@ Controls:
   Ctrl+C or Esc: Exit
 
 Basic Cube Commands (Beginner):
-  get         Get cube
+  delete      Delete resources
+  get         Display one or many cubes
 
 Troubleshooting and Debugging Commands:
   describe    Describe resources
   logs        Print the logs for a cubectl
+
+
 
 Flags:
   -h, --help   help for cubectl
