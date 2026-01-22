@@ -38,12 +38,10 @@ tar -xzvf cubectl_linux_amd64.tar.gz
 sudo mv cubectl /usr/local/bin/
 cubectl
 ```
-## 🍎 macOS
+## 🍎🍺  macOS / Homebrew
 ```bash
-curl -LO https://github.com/y-hatano-github/cubectl/releases/latest/download/cubectl_darwin_amd64.tar.gz
-tar -xzvf cubectl_darwin_amd64.tar.gz
-sudo mv cubectl /usr/local/bin/
-cubectl
+brew tap y-hatano-github/tap
+brew install cubectl
 ```
 ## 🪟 Windows
 ```powershell
