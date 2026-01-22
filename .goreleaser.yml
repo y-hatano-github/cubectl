@@ -27,3 +27,16 @@ archives:
   - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 release:
   prerelease: auto
+brews:
+  - name: cubectl
+    repository:
+      owner: y-hatano-github
+      name: homebrew-tap
+    directory: Formula
+    homepage: "https://github.com/y-hatano-github/cubectl"
+    description: "cubectl controls cube instead of Kubernetes clusters."
+    license: "MIT"
+    test: |
+      system "#{bin}/cubectl --help"
+    install: |
+      bin.install "cubectl"
