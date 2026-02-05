@@ -114,7 +114,7 @@ loop:
 				logIndex++
 			}
 
-			if !iscollapse && logIndex == len(logs) && time.Since(startTime) > 2*time.Second {
+			if !iscollapse && logIndex == len(logs) && time.Since(startTime) > time.Second {
 				iscollapse = true
 			}
 
