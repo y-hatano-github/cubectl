@@ -6,7 +6,7 @@ import (
 	"cubectl/internal/logger"
 	"cubectl/internal/terminal"
 	"fmt"
-	"math/rand/v2"
+	"math"
 	"strings"
 	"time"
 )
@@ -57,6 +57,7 @@ func RenderD(ctx context.Context, opts Options) error {
 
 	s.SetOutputMode()
 	s.Clear()
+	w, h := s.Size()
 
 	ch := make(chan terminal.Event)
 	go keyEvent(ch, s)
@@ -119,10 +120,28 @@ loop:
 			}
 
 			if iscollapse {
+				elapsed := time.Since(startTime).Seconds()
+				centerX, centerY := 40.0, 20.0
+
 				for i, fd := range faceData {
 					for j := range fd.Outline {
-						dxs[i][j] = rand.Float64() - float64(1.1)*2
-						dys[i][j] = rand.Float64() - float64(1.5)
+						p := fd.Outline[j]
+
+						// Calculate distance from the center
+						relX := float64(p.X) - centerX
+						relY := float64(p.Y) - centerY
+						dist := math.Sqrt(relX*relX + relY*relY)
+
+						// Rotation speed (faster near the center, accelerates over time)
+						angleStep := (0.5 / (dist + 1)) + (elapsed * 0.1)
+
+						// Calculate the new position of the point after rotation
+						newX := relX*math.Cos(angleStep) - relY*math.Sin(angleStep)*1.2
+						newY := relX*math.Sin(angleStep) + relY*math.Cos(angleStep)*1.2
+
+						// Movement towards the outward
+						dxs[i][j] = (newX*1.15 - relX)
+						dys[i][j] = (newY*1.15 - relY)
 					}
 				}
 			}
@@ -133,20 +152,22 @@ loop:
 					fd.Outline[j].X = int(float64(fd.Outline[j].X) + dxs[i][j])
 					fd.Outline[j].Y = int(float64(fd.Outline[j].Y) + dys[i][j])
 					p := fd.Outline[j]
-					if p.X > -1 && p.Y > -1 {
+					if p.X > -1 && p.Y > -1 && p.X < w && p.Y < h {
 						allZero = false
 						s.SetCell(p.X, p.Y, ' ', terminal.ColorDefault, terminal.ColorWhite)
 					}
 				}
 			}
 
+			s.Flush()
 			if allZero {
+				time.Sleep(500 * time.Millisecond)
 				break loop
 			}
-
-			s.Flush()
 			time.Sleep(50 * time.Millisecond)
+
 		}
 	}
+
 	return nil
 }
