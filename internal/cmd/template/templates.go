@@ -1,6 +1,6 @@
-package cmd
+package template
 
-const cubectlHelpTemplate = `{{with or .Long .Short }}{{. | trimTrailingWhitespaces}}
+const CubectlHelpTemplate = `{{with or .Long .Short }}{{. | trimTrailingWhitespaces}}
 {{end}}{{if gt (len .Groups) 0}}{{range $g := .Groups}}
 {{$g.Title}}
 {{- range $.Commands}}
@@ -13,10 +13,10 @@ const cubectlHelpTemplate = `{{with or .Long .Short }}{{. | trimTrailingWhitespa
 {{if .HasExample}}Examples:
 {{.Example | trimTrailingWhitespaces}}
 {{end}}
-{{if .HasAvailableLocalFlags}}Flags:
+{{if .HasAvailableLocalFlags}}Options:
 {{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}
 
-{{end}}{{if .HasAvailableInheritedFlags}}Global Flags:
+{{end}}{{if .HasAvailableInheritedFlags}}Global Options:
 {{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}
 
 {{end}}{{if .Runnable}}Usage:
@@ -28,7 +28,7 @@ const cubectlHelpTemplate = `{{with or .Long .Short }}{{. | trimTrailingWhitespa
 Use "{{.CommandPath}} <command> --help" for more information about a command.
 {{end}}`
 
-const cubectlUsageTemplate = `Usage:
+const CubectlUsageTemplate = `Usage:
   {{.UseLine}}
 
 {{if .HasAvailableSubCommands}}Available Commands:
@@ -39,12 +39,12 @@ const cubectlUsageTemplate = `Usage:
 {{end}}
 {{end}}
 
-{{if .HasAvailableLocalFlags}}Flags:
+{{if .HasAvailableLocalFlags}}Options:
 {{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}
 {{end}}
 
 {{if .HasAvailableInheritedFlags}}
-Global Flags:
+Global Options:
 {{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}
 {{end}}
 

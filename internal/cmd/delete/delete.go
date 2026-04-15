@@ -2,6 +2,7 @@ package delete
 
 import (
 	"cubectl/internal/app/cube"
+	"cubectl/internal/cmd/template"
 
 	"github.com/spf13/cobra"
 )
@@ -23,6 +24,8 @@ Note: The structural integrity of the cube will be compromised upon deletion.`,
 		},
 	}
 
+	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
+	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
 	return cmd
 
 }

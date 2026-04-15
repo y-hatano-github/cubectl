@@ -2,6 +2,7 @@ package get
 
 import (
 	cube "cubectl/internal/app/cube"
+	"cubectl/internal/cmd/template"
 
 	"github.com/spf13/cobra"
 )
@@ -43,7 +44,8 @@ func NewGetPodCmd() *cobra.Command {
 			return cube.Render(cmd.Context(), opts)
 		},
 	}
-
+	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
+	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
 	cmd.Flags().StringVarP(&output, "output", "o", "wireframe", "Output format: wireframe|solid")
 	cmd.Flags().BoolP("watch", "w", false, "Watch for changes to the cube (it will keep spinning)")
 

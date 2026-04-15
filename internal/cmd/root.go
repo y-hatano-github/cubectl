@@ -9,6 +9,7 @@ import (
 	"cubectl/internal/cmd/describe"
 	"cubectl/internal/cmd/get"
 	"cubectl/internal/cmd/logs"
+	"cubectl/internal/cmd/template"
 
 	"github.com/spf13/cobra"
 )
@@ -41,8 +42,8 @@ Controls:
 }
 
 func init() {
-	rootCmd.SetHelpTemplate(cubectlHelpTemplate)
-	rootCmd.SetUsageTemplate(cubectlUsageTemplate)
+	rootCmd.SetHelpTemplate(template.CubectlHelpTemplate)
+	rootCmd.SetUsageTemplate(template.CubectlUsageTemplate)
 
 	rootCmd.AddGroup(
 		&cobra.Group{

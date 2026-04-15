@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 
 	cube "cubectl/internal/app/cube"
+	"cubectl/internal/cmd/template"
 )
 
 func NewGetCmd() *cobra.Command {
@@ -34,6 +35,8 @@ This command mimics 'kubectl get' but operates on cubes and other joke resources
 		},
 		GroupID: "basic",
 	}
+	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
+	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
 
 	cmd.AddCommand(NewGetPodsCmd())
 	cmd.AddCommand(NewGetPodCmd())

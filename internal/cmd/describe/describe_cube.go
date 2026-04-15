@@ -3,12 +3,13 @@ package describe
 
 import (
 	"cubectl/internal/app/describe"
+	"cubectl/internal/cmd/template"
 
 	"github.com/spf13/cobra"
 )
 
 func NewDescribeCubeCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "cube [name]",
 		Short: "Describe a cube",
 		Long:  `Show detailed information about a cube in a funny kubectl-like style.`,
@@ -25,10 +26,14 @@ func NewDescribeCubeCmd() *cobra.Command {
 			describe.DescribePod(cmd.Context(), opts)
 		},
 	}
+	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
+	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+
+	return cmd
 }
 
 func NewDescribeCubesCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 
 		Use:   "cubes",
 		Short: "Describe all cube",
@@ -37,4 +42,8 @@ func NewDescribeCubesCmd() *cobra.Command {
 			describe.DescribePods(cmd.Context())
 		},
 	}
+	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
+	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+
+	return cmd
 }
