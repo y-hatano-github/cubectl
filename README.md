@@ -15,7 +15,7 @@
     |_|/
 ```
 **"kubectl [kjuːb kəntróul] ... wait, CUBE control!?"**  
-(Note: As a non-native English speaker, I misread “cube control” as `/kʊbɛ kəntróul/` [🔊](https://ipa-reader.com/?text=k%CA%8Ab%C9%9B%20k%C9%99ntr%C3%B3ul&voice=Takumi). Hence, this tool was born.)
+(Note: As a non-native English speaker, I mispronounce “kubectl” as `/kʊbɛ kəntróul/` [🔊](https://ipa-reader.com/?text=k%CA%8Ab%C9%9B%20k%C9%99ntr%C3%B3ul&voice=Takumi). Hence, this tool was born.)
 
 | Command | Pronunciation | Purpose |
 | --- | --- | --- |
