@@ -7,17 +7,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func NewDeleteCmd() *cobra.Command {
+func NewDeleteCubeCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "delete",
-		Short: "Delete cubes",
-		Long: `Delete cubes from cubectl.
+		Use:   "cube",
+		Short: "Delete a cube",
+		Long: `Delete a cube from cubectl.
 
 This command mimics 'kubectl delete' but operates on cubes.
 Note: The structural integrity of the cube will be compromised upon deletion.`,
 		Example: `  # Delete a cube.
-  cubectl delete`,
-		GroupID: "basic",
+  cubectl delete cube`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cube.RenderD(cmd.Context(), cube.Options{})
 			return nil
@@ -26,10 +25,6 @@ Note: The structural integrity of the cube will be compromised upon deletion.`,
 
 	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
 	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
-
-	cmd.AddCommand(NewDeletePodCmd())
-	cmd.AddCommand(NewDeleteCubeCmd())
-
 	return cmd
 
 }

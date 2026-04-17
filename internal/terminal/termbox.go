@@ -54,6 +54,8 @@ func toTermboxColor(c Color) termbox.Attribute {
 		return termbox.ColorCyan
 	case ColorWhite:
 		return termbox.ColorWhite
+	case ColorLightGreen:
+		return termbox.Attribute(120)
 	default:
 		return termbox.ColorDefault
 	}

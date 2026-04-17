@@ -1,0 +1,219 @@
+package pod
+
+import (
+	"context"
+	g "cubectl/internal/graphics"
+	"fmt"
+	"math"
+	"strings"
+	"time"
+
+	"cubectl/internal/logger"
+	"cubectl/internal/terminal"
+)
+
+type Options struct {
+	Output string
+	Watch  bool
+}
+
+func Render(ctx context.Context, opts Options) error {
+	output := opts.Output
+	w := opts.Watch
+
+	if output == "" {
+		output = "wireframe" // default
+	}
+	switch output {
+	case "wireframe", "solid":
+		// valid
+	default:
+		return fmt.Errorf("unknown output format %q", output)
+	}
+
+	clog := logger.New()
+
+	logs := []string{
+		clog.Swarn(logger.Message{File: "loader.go", Line: 0, Text: "Warning: This output is a joke."}),
+		clog.Serror(logger.Message{File: "loader.go", Line: 223, Text: "Error loading kubeconfig:\nunable to read config file \"/home/user/.kube/config\": no such file or directory"}),
+		clog.Serror(logger.Message{File: "round_trippers.go", Line: 45, Text: "Failed to create Kubernetes client:\nno configuration has been provided"}),
+		clog.Serror(logger.Message{File: "command.go", Line: 112, Text: "error: unknown command \"kubectl\""}),
+		clog.Swarn(logger.Message{File: "command.go", Line: 112, Text: "This is not \"kubectl\" but \"cubectl\"\nDid you mean this?\n    kubectl"}),
+		clog.Sinfo(logger.Message{File: "command.go", Line: 112, Text: "Now you are controling pea pod."}),
+	}
+
+	logIndex := 0
+
+	// pea pod vertices
+	v := g.VertexData{
+		[3]int{6, 1, 0}, // 0: Right tip
+
+		// --- Slice 1 (Right-mid) ---
+		[3]int{4, 1, -1}, // 1: Back
+		[3]int{4, 1, 1},  // 2: Front
+		[3]int{4, 0, 0},  // 3: Bottom curve
+		[3]int{4, 2, 0},  // 4: Top curve
+
+		// --- Slice 2 (Right-center) ---
+		[3]int{2, 0, -2}, // 5: Back
+		[3]int{2, 0, 2},  // 6: Front
+		[3]int{2, -1, 0}, // 7: Bottom curve
+		[3]int{2, 1, 0},  // 8: Top curve
+
+		// --- Slice 3 (Left-center) ---
+		[3]int{-2, 0, -2}, // 9: Back
+		[3]int{-2, 0, 2},  // 10: Front
+		[3]int{-2, -1, 0}, // 11: Bottom curve
+		[3]int{-2, 1, 0},  // 12: Top curve
+
+		// --- Slice 4 (Left-mid) ---
+		[3]int{-4, 1, -1}, // 13: Back
+		[3]int{-4, 1, 1},  // 14: Front
+		[3]int{-4, 0, 0},  // 15: Bottom curve
+		[3]int{-4, 2, 0},  // 16: Top curve
+
+		[3]int{-6, 1, 0}, // 17: Left tip
+	}
+
+	// pea pod faces
+	f := g.FaceData{
+		// --- Top Tip Cap ---
+		[]int{0, 1, 4}, // Front-left
+		[]int{0, 4, 2}, // Front-right
+		[]int{0, 2, 3}, // Back-right
+		[]int{0, 3, 1}, // Back-left
+
+		// --- Upper Segment ---
+		[]int{1, 5, 8, 4}, // Front-left panel
+		[]int{4, 8, 6, 2}, // Front-right panel
+		[]int{2, 6, 7, 3}, // Back-right panel
+		[]int{3, 7, 5, 1}, // Back-left panel
+
+		// --- Middle Segment ---
+		[]int{5, 9, 12, 8},
+		[]int{8, 12, 10, 6},
+		[]int{6, 10, 11, 7},
+		[]int{7, 11, 9, 5},
+
+		// --- Lower Segment ---
+		[]int{9, 13, 16, 12},
+		[]int{12, 16, 14, 10},
+		[]int{10, 14, 15, 11},
+		[]int{11, 15, 13, 9},
+
+		// --- Bottom Tip Cap ---
+		[]int{17, 16, 13}, // Front-left
+		[]int{17, 14, 16}, // Front-right
+		[]int{17, 15, 14}, // Back-right
+		[]int{17, 13, 15}, // Back-left
+	}
+
+	m := g.NewModel(v, f, 8)
+
+	s := terminal.New()
+	if err := s.Init(); err != nil {
+		return err
+	}
+	defer s.Close()
+
+	s.SetOutputMode()
+	s.Clear()
+
+	ch := make(chan terminal.Event)
+	go keyEvent(ch, s)
+
+	yaw := 0.0
+	pitch := 0.0
+	scale := 0.3
+	twoPi := 2 * math.Pi
+
+	drawString := func(x, y int, str string) {
+		for i, r := range str {
+			s.SetCell(x+i, y, r, terminal.ColorDefault, terminal.ColorBlack)
+		}
+	}
+
+loop:
+	for {
+		select {
+		case ev := <-ch:
+			switch ev.Type {
+			case terminal.EventKey:
+				if ev.Key == terminal.KeyCtrlC || ev.Key == terminal.KeyEsc {
+					break loop
+				}
+				if ev.Key == terminal.KeyArrowLeft || string(ev.Rune) == "a" {
+					yaw = math.Mod(yaw-0.1, twoPi)
+				}
+				if ev.Key == terminal.KeyArrowRight || string(ev.Rune) == "d" {
+					yaw = math.Mod(yaw+0.1, twoPi)
+				}
+				if ev.Key == terminal.KeyArrowUp || string(ev.Rune) == "w" {
+					pitch = math.Mod(pitch-0.1, twoPi)
+				}
+				if ev.Key == terminal.KeyArrowDown || string(ev.Rune) == "s" {
+					pitch = math.Mod(pitch+0.1, twoPi)
+				}
+				if string(ev.Rune) == "z" {
+					scale += 0.1
+					scale = math.Min(1.3, scale)
+				}
+				if string(ev.Rune) == "x" {
+					scale -= 0.1
+					scale = math.Max(0.1, scale)
+				}
+			}
+		default:
+			s.Clear()
+
+			r := 0
+			for l := range logIndex {
+				lines := strings.Split(logs[l], "\n")
+				for _, line := range lines {
+					drawString(0, r, line)
+					r = r + 1
+				}
+			}
+			if logIndex < len(logs) {
+				logIndex++
+			}
+
+			if w {
+				yaw = math.Mod(yaw+0.02, twoPi)
+				pitch = math.Mod(pitch+0.01, twoPi)
+			}
+
+			faceData := m.GetShape(yaw, pitch, scale, 40, 20)
+			for _, fd := range faceData {
+				if output == "solid" {
+					for _, p := range fd.Fill {
+						s.SetCell(p.X, p.Y, ' ', terminal.ColorDefault, terminal.ColorLightGreen)
+					}
+				}
+				for _, p := range fd.Outline {
+					s.SetCell(p.X, p.Y, ' ', terminal.ColorDefault, terminal.ColorGreen)
+				}
+			}
+
+			s.Flush()
+			time.Sleep(10 * time.Millisecond)
+		}
+	}
+
+	return nil
+}
+
+func keyEvent(ch chan terminal.Event, s terminal.Screen) {
+	for {
+		ch <- s.PollEvent()
+	}
+}
+
+func CubeTimestamp() string {
+	now := time.Now()
+	return fmt.Sprintf(
+		"%s %s",
+		now.Format("0102"),            // MMDD
+		now.Format("15:04:05.000000"), // HH:MM:SS.microsec
+	)
+}

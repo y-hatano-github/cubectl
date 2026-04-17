@@ -1,7 +1,7 @@
 package get
 
 import (
-	cube "cubectl/internal/app/cube"
+	pod "cubectl/internal/app/pod"
 	"cubectl/internal/cmd/template"
 
 	"github.com/spf13/cobra"
@@ -15,11 +15,11 @@ func NewGetPodsCmd() *cobra.Command {
 			output, _ := cmd.Flags().GetString("output")
 			watch, _ := cmd.Flags().GetBool("watch")
 
-			opts := cube.Options{
+			opts := pod.Options{
 				Output: output,
 				Watch:  watch,
 			}
-			return cube.Render(cmd.Context(), opts)
+			return pod.Render(cmd.Context(), opts)
 		},
 	}
 
@@ -37,11 +37,11 @@ func NewGetPodCmd() *cobra.Command {
 			output, _ := cmd.Flags().GetString("output")
 			watch, _ := cmd.Flags().GetBool("watch")
 
-			opts := cube.Options{
+			opts := pod.Options{
 				Output: output,
 				Watch:  watch,
 			}
-			return cube.Render(cmd.Context(), opts)
+			return pod.Render(cmd.Context(), opts)
 		},
 	}
 	cmd.SetHelpTemplate(template.CubectlHelpTemplate)

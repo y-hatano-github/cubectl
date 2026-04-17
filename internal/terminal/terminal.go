@@ -12,6 +12,7 @@ const (
 	ColorMagenta
 	ColorCyan
 	ColorWhite
+	ColorLightGreen
 )
 
 type Screen interface {
