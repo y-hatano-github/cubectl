@@ -73,23 +73,20 @@ Controls:
   Ctrl+C or Esc: Exit
 
 Basic Cube Commands (Beginner):
-  delete      Delete resources
-  get         Display one or many cubes
+  delete      Delete a resource
+  get         Display a resource
 
 Troubleshooting and Debugging Commands:
-  describe    Describe resources
-  logs        Print the logs for a cubectl
+  describe    Describe a resource
+  logs        Print the logs for a resource
 
-
-
-Flags:
-  -h, --help   help for cubectl
-
-Usage:
-  cubectl [flags]
+Options:
+  -h, --help            help for cubectl
+  -o, --output string   Output format: wireframe|solid (default "wireframe")
+  -w, --watch           Watch for changes to the cube (it will keep spinning)
 
 Usage:
-  cubectl [command]
+  cubectl [command] [options]
 
 Use "cubectl <command> --help" for more information about a command.
 ```

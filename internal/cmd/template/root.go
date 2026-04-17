@@ -25,7 +25,7 @@ Options:
   -w, --watch           Watch for changes to the cube (it will keep spinning)
 
 Usage:
-  cubectl [command]
+  cubectl [command] [options]
 
 Use "cubectl <command> --help" for more information about a command.
 `
@@ -55,7 +55,7 @@ Options:
   -w, --watch           Watch for changes to the cube (it will keep spinning)
 
 Usage:
-  cubectl [command]
+  cubectl [command] [options]
 
 Use "cubectl <command> --help" for more information about a command.
 `
