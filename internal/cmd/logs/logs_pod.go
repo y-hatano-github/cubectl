@@ -1,15 +1,15 @@
 package logs
 
 import (
-	"github.com/spf13/cobra"
-
 	"cubectl/internal/app/logs"
 	"cubectl/internal/cmd/template"
+
+	"github.com/spf13/cobra"
 )
 
-func NewLogsCmd() *cobra.Command {
+func NewLogsPodCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "logs",
+		Use:   "pod",
 		Short: "Print the logs for a cubectl",
 		Long:  `Print the logs for a cubectl. This is not a real pod, just a joke.`,
 		Example: `
@@ -28,17 +28,13 @@ func NewLogsCmd() *cobra.Command {
 				opts.Name = &args[0]
 			}
 
-			logs.LogCube(cmd.Context(), opts)
+			logs.LogPod(cmd.Context(), opts)
 		},
-		GroupID: "troubleshooting",
 	}
 
 	cmd.SetHelpTemplate(template.LogsPodHelpTemplate)
 	cmd.SetUsageTemplate(template.LogsPodUsageTemplate)
 	cmd.Flags().BoolP("follow", "f", false, "Specify if the logs should be streamed.")
 	cmd.Flags().Int32("tail", -1, "Lines of recent log file to display. Defaults to -1 with no selector, showing all log lines otherwise 10, if a selector is provided.")
-
-	cmd.AddCommand(NewLogsPodCmd())
-	cmd.AddCommand(NewLogsCubeCmd())
 	return cmd
 }

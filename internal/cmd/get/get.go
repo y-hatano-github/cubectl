@@ -35,8 +35,8 @@ This command mimics 'kubectl get' but operates on cubes and other joke resources
 		},
 		GroupID: "basic",
 	}
-	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	cmd.SetHelpTemplate(template.GetPodHelpTemplate)
+	cmd.SetUsageTemplate(template.GetPodUsageTemplate)
 
 	cmd.Flags().StringVarP(&output, "output", "o", "wireframe", "Output format: wireframe|solid")
 	cmd.Flags().BoolP("watch", "w", false, "Watch for changes to the cube (it will keep spinning)")

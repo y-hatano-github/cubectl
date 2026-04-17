@@ -24,8 +24,8 @@ Note: The structural integrity of the cube will be compromised upon deletion.`,
 		},
 	}
 
-	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	cmd.SetHelpTemplate(template.DeletePodHelpTemplate)
+	cmd.SetUsageTemplate(template.DeletePodUsageTemplate)
 
 	cmd.AddCommand(NewDeletePodCmd())
 	cmd.AddCommand(NewDeleteCubeCmd())

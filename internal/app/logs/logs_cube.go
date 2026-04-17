@@ -19,7 +19,7 @@ type Options struct {
 	Tail   int32
 }
 
-func Log(ctx context.Context, ots Options) error {
+func LogCube(ctx context.Context, ots Options) error {
 	cubeName := "cube"
 	if !isEmpty(ots.Name) {
 		cubeName = *ots.Name
@@ -90,10 +90,10 @@ Loop:
 					}
 					yaw = math.Mod(yaw+0.08, twoPi)
 					pitch = math.Mod(pitch+0.04, twoPi)
-					drawCube(&m, yaw, pitch, scale)
+					drawObject(&m, yaw, pitch, scale)
 					time.Sleep(300 * time.Millisecond)
 				} else {
-					drawCube(&m, yaw, pitch, scale)
+					drawObject(&m, yaw, pitch, scale)
 					break Loop
 				}
 			}
@@ -111,7 +111,7 @@ Loop:
 	return nil
 }
 
-func drawCube(m *g.Model, yaw, pitch, scale float64) {
+func drawObject(m *g.Model, yaw, pitch, scale float64) {
 	d := [40][40]int{}
 	faceData := m.GetShape(yaw, pitch, scale, 20, 10)
 	for _, fd := range faceData {

@@ -46,8 +46,8 @@ Controls:
 }
 
 func init() {
-	rootCmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	rootCmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	rootCmd.SetHelpTemplate(template.RootHelpTemplate)
+	rootCmd.SetUsageTemplate(template.RootUsageTemplate)
 
 	rootCmd.AddGroup(
 		&cobra.Group{
