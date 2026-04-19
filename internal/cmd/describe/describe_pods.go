@@ -17,7 +17,7 @@ func NewDescribePodCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			opts := describe.Options{}
 
-			name := "default-cube"
+			name := "default-pod"
 			opts.Name = &name
 			if len(args) > 0 {
 				opts.Name = &args[0]
@@ -26,8 +26,8 @@ func NewDescribePodCmd() *cobra.Command {
 			describe.DescribePod(cmd.Context(), opts)
 		},
 	}
-	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	cmd.SetHelpTemplate(template.DescribePodHelpTemplate)
+	cmd.SetUsageTemplate(template.DescribePodUsageTemplate)
 
 	return cmd
 }
@@ -36,14 +36,14 @@ func NewDescribePodsCmd() *cobra.Command {
 	cmd := &cobra.Command{
 
 		Use:   "pods",
-		Short: "Describe all cube",
-		Long:  `Show detailed information about all pods (joke) in cubectl style.`,
+		Short: "Describe all pods",
+		Long:  `Show detailed information about all pods in cubectl style.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			describe.DescribePods(cmd.Context())
 		},
 	}
-	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	cmd.SetHelpTemplate(template.DescribePodHelpTemplate)
+	cmd.SetUsageTemplate(template.DescribePodUsageTemplate)
 
 	return cmd
 }

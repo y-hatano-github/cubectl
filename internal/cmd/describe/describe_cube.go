@@ -26,8 +26,8 @@ func NewDescribeCubeCmd() *cobra.Command {
 			describe.DescribePod(cmd.Context(), opts)
 		},
 	}
-	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	cmd.SetHelpTemplate(template.DescribePodHelpTemplate)
+	cmd.SetUsageTemplate(template.DescribePodUsageTemplate)
 
 	return cmd
 }
@@ -42,8 +42,8 @@ func NewDescribeCubesCmd() *cobra.Command {
 			describe.DescribePods(cmd.Context())
 		},
 	}
-	cmd.SetHelpTemplate(template.CubectlHelpTemplate)
-	cmd.SetUsageTemplate(template.CubectlUsageTemplate)
+	cmd.SetHelpTemplate(template.DescribePodHelpTemplate)
+	cmd.SetUsageTemplate(template.DescribePodUsageTemplate)
 
 	return cmd
 }

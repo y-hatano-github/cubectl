@@ -1,6 +1,6 @@
 package template
 
-var LogsPodHelpTemplate = `Print the logs for a cubectl.
+var LogsPodHelpTemplate = `Print the logs for a resource (cube or pod).
 This is not a real pod, just a joke.
 
 Examples:
@@ -8,7 +8,7 @@ Examples:
   # Begin streaming the logs of a cube 3d model.
   cubectl logs cube -f
 
-  # Display only the most recent 20 lines of output
+  # Display only the most recent 20 lines of output from a pea pod.
   cubectl logs pod --tail=20
 
 Options:
@@ -20,7 +20,7 @@ Usage:
   cubectl logs [cube|pod] [Options]
 `
 
-var LogsPodUsageTemplate = `Print the logs for a cubectl.
+var LogsPodUsageTemplate = `Print the logs for a resource (cube or pod).
 This is not a real pod, just a joke.
 
 Examples:
@@ -28,7 +28,7 @@ Examples:
   # Begin streaming the logs of a cube 3d model.
   cubectl logs cube -f
 
-  # Display only the most recent 20 lines of output
+  # Display only the most recent 20 lines of output from a pea pod.
   cubectl logs pod --tail=20
 
 Options:
@@ -37,5 +37,5 @@ Options:
       --tail int32   Lines of recent log file to display. Defaults to -1 with no selector, showing all log lines otherwise 10, if a selector is provided. (default -1)
 
 Usage:
-  cubectl logs [cube|pod] [Options]
+  cubectl logs [cube|pod] [options]
 `
