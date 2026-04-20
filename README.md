@@ -105,6 +105,14 @@ kubectl cube
 kubectl cube logs -f
 ```
 
+# 🛠️ Build from source
+```
+git clone https://github.com/yoshihicode/cubectl.git
+cd cubectl
+go build -o cubectl
+./cubectl
+```
+
 # 📚 References
 ## Inspiration for the idea
 I was reading the following articles, and somehow ended up creating this joke command.  
