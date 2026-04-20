@@ -11,20 +11,20 @@
 / /___/ /_/ / /_/ / /___/ /___  / / / /___
 \____/\____/_____/_____/\____/ /_/ /_____/
       _
-    /_/|  Concept: "Control the Cube instead of Kubernetes cluster"
+    /_/|  Concept: "Control a Cube instead of Kubernetes clusters"
     |_|/
 ```
 **"kubectl [kjuːb kəntróul] ... wait, CUBE control!?"**  
-(Note: As a non-native English speaker, I mispronounce “kubectl” as `/kʊbɛ kəntróul/` [🔊](https://ipa-reader.com/?text=k%CA%8Ab%C9%9B%20k%C9%99ntr%C3%B3ul&voice=Takumi). Hence, this tool was born.)
+(Note: As a non-native English speaker, I mispronounced “kubectl” as `/kʊbɛ kəntróul/` [🔊](https://ipa-reader.com/?text=k%CA%8Ab%C9%9B%20k%C9%99ntr%C3%B3ul&voice=Takumi). Hence, this tool was born.)
 
 | Command | Pronunciation | Purpose |
 | --- | --- | --- |
 | `kubectl` | /kjuːb kəntróul/ | Controls Kubernetes clusters. |
-| `cubectl` | /kjuːb kəntróul/ | Controls a cube(and a pea pod) instead of Kubernetes clusters. |
+| `cubectl` | /kjuːb kəntróul/ | Controls a cube (and a pea pod) instead of Kubernetes clusters. |
 
 # ⚙️ Features
 - 🧊 Renders a 3D cube instead of controlling Kubernetes clusters.
-- 🫛 Renders a 3D pea pod instead of controlling Kubernetes clusters.
+- 🫛 Renders a rotating pea pod too.
 - 🔄 Rotate the cube with arrow keys or `wasd`.
 - 🔍 Zoom in/out with `z` and `x`.
 - 🚫 Absolutely no Kubernetes functionality included.
@@ -62,7 +62,7 @@ tar -xzvf cubectl_windows_amd64.tar.gz
 
 # 📘 Usage
 ```bash
-cubectl controls cube and pea pod instead of Kubernetes clusters.
+cubectl controls a cube (and a pea pod) instead of Kubernetes clusters.
 
 Find more information at:
   https://github.com/yoshihicode/cubectl
@@ -115,9 +115,12 @@ go build -o cubectl
 
 # 📚 References
 ## Inspiration for the idea
-I was reading the following articles, and somehow ended up creating this joke command.  
-- https://www.reddit.com/r/kubernetes/comments/7tzyla/poll_how_to_pronounce_kubectl/
+I was reading the following discussion, which somehow inspired this joke CLI command.
+- [Poll: how to pronounce kubectl (Reddit)](https://www.reddit.com/r/kubernetes/comments/7tzyla/poll_how_to_pronounce_kubectl/)
 
-## For 3D rendering
-- https://codezine.jp/article/detail/38?p=3
-- https://qiita.com/mochimkchiking/items/24fbbe93e0f7aa89edba
+## Line drawing
+- [Bresenham's line algorithm (Wikipedia)](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm)
+
+## 3D Rendering
+- [Creating a Java applet to display 3D models (CodeZine)](https://codezine.jp/article/detail/38?p=3)
+- [Rotating a cube using JavaScript's canvas (Qiita)](https://qiita.com/mochimkchiking/items/24fbbe93e0f7aa89edba)
