@@ -17,7 +17,7 @@ type PolygonData struct {
 func polygon(x, y []int) PolygonData {
 	return PolygonData{
 		Outline: outline(x, y),
-		Fill:    fll(x, y),
+		Fill:    fill(x, y),
 	}
 }
 
@@ -34,7 +34,7 @@ func outline(x, y []int) []Point {
 	return ps
 }
 
-func fll(x, y []int) []Point {
+func fill(x, y []int) []Point {
 	ps := []Point{}
 
 	ymin, ymax := y[0], y[0]
