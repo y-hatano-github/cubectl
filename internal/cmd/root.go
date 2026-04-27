@@ -31,7 +31,7 @@ Controls:
   z: Zoom in
   x: Zoom out
   Ctrl+C or Esc: Exit`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		output, _ := cmd.Flags().GetString("output")
 		watch, _ := cmd.Flags().GetBool("watch")
 
@@ -40,9 +40,10 @@ Controls:
 			Watch:  watch,
 		}
 		// default action
-		cube.Render(cmd.Context(), opts)
+		return cube.Render(cmd.Context(), opts)
 	},
-	SilenceUsage: true,
+	SilenceUsage:  true,
+	SilenceErrors: true,
 }
 
 func init() {
